@@ -26,12 +26,20 @@ function Wall({ cards }) {
 
 export default function App() {
   const [cards] = useState(START);
+  const [name, setName] = useState("");
 
   return (
     <div>
       <header className="place" style={{ background: "olive", color: "white" }}>
         <h1>Bus office</h1>
       </header>
+      <input
+        placeholder="Name"
+        value={name}
+        onChange={function (event) {
+          setName(event.target.value);
+        }}
+      />
       <Wall cards={cards} />
       <footer>247215</footer>
     </div>
