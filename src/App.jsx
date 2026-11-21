@@ -27,6 +27,7 @@ function Wall({ cards }) {
 export default function App() {
   const [cards] = useState(START);
   const [name, setName] = useState("");
+  const [note, setNote] = useState("");
 
   return (
     <div>
@@ -38,6 +39,13 @@ export default function App() {
         value={name}
         onChange={function (event) {
           setName(event.target.value);
+        }}
+      />
+      <input
+        placeholder="Note"
+        value={note}
+        onChange={function (event) {
+          setNote(event.target.value);
         }}
       />
       <Wall cards={cards} />
