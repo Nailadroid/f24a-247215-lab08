@@ -1,4 +1,12 @@
-﻿function Card({ item }) {
+﻿import { useState } from "react";
+
+const START = [
+  { name: "Sara", bed: 4, note: "" },
+  { name: "Omar", bed: 9, note: "" },
+  { name: "Hina", bed: 2, note: "" },
+];
+
+function Card({ item }) {
   return (
     <button type="button" className="card">
       {item.name} bed {item.bed} {item.note}
@@ -6,13 +14,25 @@
   );
 }
 
+function Wall({ cards }) {
+  return (
+    <div>
+      {cards.map(function (item, index) {
+        return <Card key={index} item={item} />;
+      })}
+    </div>
+  );
+}
+
 export default function App() {
+  const [cards] = useState(START);
+
   return (
     <div>
       <header className="place" style={{ background: "olive", color: "white" }}>
         <h1>Bus office</h1>
       </header>
-      <Card item={{ name: "Sara", bed: 4, note: "" }} />
+      <Wall cards={cards} />
       <footer>247215</footer>
     </div>
   );
