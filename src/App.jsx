@@ -6,6 +6,33 @@ const START = [
   { name: "Hina", bed: 2, note: "" },
 ];
 
+function Slip({ name, note, onName, onNote, onSave }) {
+  return (
+    <form
+      onSubmit={function (event) {
+        event.preventDefault();
+        onSave();
+      }}
+    >
+      <input
+        placeholder="Name"
+        value={name}
+        onChange={function (event) {
+          onName(event.target.value);
+        }}
+      />
+      <input
+        placeholder="Note"
+        value={note}
+        onChange={function (event) {
+          onNote(event.target.value);
+        }}
+      />
+      <button type="submit">Save</button>
+    </form>
+  );
+}
+
 function Card({ item }) {
   return (
     <button type="button" className="card">
@@ -25,30 +52,57 @@ function Wall({ cards }) {
 }
 
 export default function App() {
-  const [cards] = useState(START);
+  const [cards, setCards] = useState(START);
   const [name, setName] = useState("");
   const [note, setNote] = useState("");
+  const [line, setLine] = useState("");
+
+  function handleSave() {
+    if (note.trim() === "") {
+      setLine("Type a note");
+      return;
+    }
+
+    const found = cards.some(function (item) {
+      return item.name.toLowerCase() === name.trim().toLowerCase();
+    });
+
+    if (!found) {
+      setLine("Not on the list");
+      return;
+    }
+
+    const updated = cards.map(function (item) {
+      if (item.name.toLowerCase() === name.trim().toLowerCase()) {
+        return { name: item.name, bed: item.bed, note: note.trim() };
+      }
+      return item;
+    });
+
+    setCards(updated);
+    setLine("");
+    setName("");
+    setNote("");
+  }
 
   return (
     <div>
       <header className="place" style={{ background: "olive", color: "white" }}>
         <h1>Bus office</h1>
       </header>
-      <input
-        placeholder="Name"
-        value={name}
-        onChange={function (event) {
-          setName(event.target.value);
-        }}
+
+      <Slip
+        name={name}
+        note={note}
+        onName={setName}
+        onNote={setNote}
+        onSave={handleSave}
       />
-      <input
-        placeholder="Note"
-        value={note}
-        onChange={function (event) {
-          setNote(event.target.value);
-        }}
-      />
+
       <Wall cards={cards} />
+
+      <p>{line}</p>
+
       <footer>247215</footer>
     </div>
   );
